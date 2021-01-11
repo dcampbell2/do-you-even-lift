@@ -10,6 +10,14 @@ router.get("/api/workouts", (req, res) => {
   });
 });
 
+router.get("/api/workouts/range", (req, res) => {
+    Workout.aggregate([
+        { $addFields: { totalDuration: { $sum: "$exercises.duration" } } },
+      ]).then((workoutRange) => {
+          res.json(workoutRange)
+      });
+})
+
 router.post("/api/workouts", ({ body }, res) => {
   Workout.create(body)
     .then((newWorkout) => {
